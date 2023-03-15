@@ -1,3 +1,3 @@
 export function square(num) {
-  return num ** 2
+  return num * 2
 }
