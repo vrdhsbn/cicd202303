@@ -1,4 +1,4 @@
-import { square } from "./square"
+import { square } from "../src/square"
 
 describe('square関数のテスト', () => {
   
