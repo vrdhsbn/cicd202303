@@ -1,10 +1,10 @@
-name: Run test
+name: Run build, test, deploy
 on: 
   push:
     branches: [master]
 
 jobs:
-  unit-test:
+  build-test-deploy:
     runs-on: ubuntu-latest
     steps:
       # リポジトリをチェックアウトする
@@ -27,7 +27,7 @@ jobs:
       # npmスクリプトを実行する
       - run: |
           npm ci
-          npm run build --if-present
+          npm run build
           npm run test
 
       # ビルドした成果物をgh-pagesにデプロイする
