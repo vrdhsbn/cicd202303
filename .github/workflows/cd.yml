@@ -3,6 +3,15 @@ on:
   push:
     branches: [master]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
@@ -11,7 +20,7 @@ jobs:
       - uses: actions/checkout@v3
 
       # Nodeをセットアップする
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 18.x
 
@@ -30,10 +39,23 @@ jobs:
           npm run build
           npm run test
 
-      # ビルドした成果物をgh-pagesにデプロイする
-      - name: deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+      # Pagesにデプロイする
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-            deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-            publish_dir: ./build
+          path: './build'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+
+      # ビルドした成果物をgh-pagesにデプロイする
+      # - name: deploy to gh-pages
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #       deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+      #       publish_dir: ./build
 
