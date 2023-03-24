@@ -8,6 +8,7 @@ permissions:
   pages: write
   id-token: write
 
+# 進行中のデプロイがあってもそれをキャンセルしない
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -34,7 +35,8 @@ jobs:
             ${{ runner.os }}-node-
 
       # npmスクリプトを実行する
-      - run: |
+      - name: Run npm scripts
+        run: |
           npm ci
           npm run build
           npm run test
